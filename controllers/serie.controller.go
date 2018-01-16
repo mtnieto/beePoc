@@ -15,7 +15,7 @@ type SerieController struct {
 // @Title createSerie
 // @Description create series
 // @Param	body		body 	models.Serie	true		"body for serie content"
-// @Success 200 {string} models.Serie.Name
+// @Success 201 {string} models.Serie.Name
 // @Failure 403 body is empty
 // @router / [post]
 func (u *SerieController) Post() {
