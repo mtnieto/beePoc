@@ -2,9 +2,9 @@ package models
 
 import (
 	"errors"
-	// "gopkg.in/mgo.v2"
-	// // "gopkg.in/mgo.v2/bson"
-	// "fmt"
+	 "gopkg.in/mgo.v2"
+	 "gopkg.in/mgo.v2/bson"
+	 "fmt"
 )
 
 var (
@@ -22,39 +22,75 @@ type Serie struct {
 func init() {
 	
 	/*Connection to database*/ 
-	// session, err := mgo.Dial("localhost:27017")
-	// if err != nil {
-	// 	fmt.Println("Could not connect to mongo: ", err.Error())
+	 session, err := mgo.Dial("localhost:27017")
+	 if err != nil {
+	 	fmt.Println("Could not connect to mongo: ", err.Error())
 	
-	// }
-	// defer session.Close()
-	// c := session.DB("test").C("Series")
-	// err = c.Insert(&Serie {"WestWorld", 2016, "HBO"})
-	// if err != nil {
-	// 	fmt.Println("Error creating Serie: ", err.Error())
+	 }
+	 defer session.Close()
+	 c := session.DB("test").C("Series")
+	 err = c.Insert(&Serie {"WestWorld", 2016, "HBO"}, &Serie {"Peaky Blinders", 2010, "Netflix"})
+	 if err != nil {
+	 	fmt.Println("Error creating Serie: ", err.Error())
 	
-	// }
-
-
-	Array = make(map[string]*Serie)
-	Array["Westworld"] = &Serie{"Dexter", 2006, "Netflix"}
-	Array["Dexter"] = &Serie{"Dexter", 2006, "Netflix"}
+	 }
 }
 
 func AddOne(serie Serie) (serieName string) {
-	Array[serie.Name] =&serie
+	/*Connection to database*/ 
+	session, err := mgo.Dial("localhost:27017")
+	if err != nil {
+		fmt.Println("Could not connect to mongo: ", err.Error())
+   
+	}
+	defer session.Close()
+	c := session.DB("test").C("Series")
+	err = c.Insert(serie)
+	if err != nil {
+		fmt.Println("Error creating Serie: ", err.Error())
+	}
 	return serie.Name
 }
 
-func GetOne(SerieName string) (serie *Serie, err error) {
-	if v, ok := Array[SerieName]; ok {
-		return v, nil
+func GetOne(SerieName string) (serie Serie, err error) {
+	
+	/*Connection to database*/ 
+	session, err := mgo.Dial("localhost:27017")
+	if err != nil {
+		fmt.Println("Could not connect to mongo: ", err.Error())
+   
 	}
-	return nil, errors.New("THis serie is not stored")
+	defer session.Close()
+	c := session.DB("test").C("Series")
+
+	result := Serie{}
+	err = c.Find(nil).Select(bson.M{"Name": serie.Name}).One(&result)
+	if err != nil {
+		return Serie{}, errors.New("THis serie is not stored")
+	}
+	fmt.Println("Phone", result)
+	return result, nil
 }
 
-func GetAll() map[string]*Serie {
-	return Array
+func GetAll() []Serie {
+
+	/*Connection to database*/ 
+	 session, err := mgo.Dial("localhost:27017")
+	 if err != nil {
+	 	fmt.Println("Could not connect to mongo: ", err.Error())
+	
+	 }
+	 defer session.Close()
+	 c := session.DB("test").C("Series")
+
+	 var results []Serie
+	 err = c.Find(nil).All(&results)
+ 
+	 if err != nil {
+		 panic(err)
+	 }
+	 fmt.Println("Results All: ", results)
+	return results
 }
 
 // func Update(ObjectId string, Score int64) (err error) {
