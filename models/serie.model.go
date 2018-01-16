@@ -62,9 +62,8 @@ func GetOne(SerieName string) (serie Serie, err error) {
 	}
 	defer session.Close()
 	c := session.DB("test").C("Series")
-
 	result := Serie{}
-	err = c.Find(nil).Select(bson.M{"Name": serie.Name}).One(&result)
+	err = c.Find(bson.M{"name": SerieName}).One(&result)
 	if err != nil {
 		return Serie{}, errors.New("THis serie is not stored")
 	}
