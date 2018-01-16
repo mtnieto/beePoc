@@ -1,0 +1,139 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Series API",
+        "description": "beego has a very cool tools to autogenerate documents for your API",
+        "version": "1.0.0",
+        "termsOfService": "http://beego.me/",
+        "contact": {
+            "email": "mtnieto94@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "basePath": "/v1",
+    "paths": {
+        "/series/": {
+            "get": {
+                "tags": [
+                    "series"
+                ],
+                "description": "get all Series stored",
+                "operationId": "SerieController.GetAll",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Serie"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "series"
+                ],
+                "description": "create series",
+                "operationId": "SerieController.createSerie",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for serie content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Serie"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} models.Serie.Name"
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/series/{uid}": {
+            "get": {
+                "tags": [
+                    "series"
+                ],
+                "description": "get Serie by uid / in this case  its Name",
+                "operationId": "SerieController.Get",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "uid",
+                        "description": "The key for staticblock",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Serie"
+                        }
+                    },
+                    "403": {
+                        "description": ":uid is empty"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "series"
+                ],
+                "description": "delete the serie",
+                "operationId": "SerieController.Delete",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "uid",
+                        "description": "The serie you want to delete",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} delete success!"
+                    },
+                    "403": {
+                        "description": "uid is empty"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.Serie": {
+            "title": "Serie",
+            "type": "object",
+            "properties": {
+                "Name": {
+                    "type": "string"
+                },
+                "Platform": {
+                    "type": "string"
+                },
+                "Year": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "series",
+            "description": "Operations about Series\n"
+        }
+    ]
+}
