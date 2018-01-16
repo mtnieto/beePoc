@@ -67,7 +67,7 @@ func GetOne(SerieName string) (serie Serie, err error) {
 	if err != nil {
 		return Serie{}, errors.New("THis serie is not stored")
 	}
-	fmt.Println("Phone", result)
+	fmt.Println("The film", result)
 	return result, nil
 }
 
@@ -101,6 +101,19 @@ func GetAll() []Serie {
 // }
 
 func Delete(SerieName string) {
-	delete(Array, SerieName)
+		/*Connection to database*/ 
+		session, err := mgo.Dial("localhost:27017")
+		if err != nil {
+			fmt.Println("Could not connect to mongo: ", err.Error())
+	   
+		}
+		defer session.Close()
+		c := session.DB("test").C("Series")
+		
+		err = c.Remove(bson.M{"name": SerieName})
+		if err != nil {
+	
+		}
+		
 }
 
